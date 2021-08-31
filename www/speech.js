@@ -2,10 +2,12 @@ function AzureSpeech() {}
 
 // The function that passes work along to native shells
 // Message is a string, duration may be 'long' or 'short'
-AzureSpeech.prototype.test = function(message, successCallback, errorCallback) {
+AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Message, successCallback, errorCallback) {
   var options = {};
-  options.message = message;
-  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'test', [options]);
+  options.SubscriptionKey = SubscriptionKey;
+  options.ServiceRegion = ServiceRegion;
+  options.Message = Message;
+  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesise', [options]);
 }
 
 // Installation constructor that binds ToastyPlugin to window
