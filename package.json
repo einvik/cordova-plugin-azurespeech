@@ -1,0 +1,37 @@
+{
+    "name": "cordova-plugin-azurespeech",
+    "version": "0.0.1",
+    "description": "An Android and iOS Cordova plugin that allows communication with Azure Speech Services.",
+    "cordova": {
+      "id": "cordova-plugin-azurespeech",
+      "platforms": [
+        "android"
+      ]
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/einvik/cordova-plugin-azurespeech.git"
+    },
+    "keywords": [
+      "Azure",
+      "Speech",
+      "Recognition",
+      "Utterance",
+      "Synthesis",
+      "ecosystem:cordova",
+      "cordova-android",
+      "cordova-ios"
+    ],
+    "engines": [
+      {
+        "name": "cordova",
+        "version": ">=3.0.0"
+      }
+    ],
+    "author": "Ola Einvik <einvik@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/einvik/cordova-plugin-azurespeech/issues"
+    },
+    "homepage": "https://github.com/einvik/cordova-plugin-azurespeech"
+  }

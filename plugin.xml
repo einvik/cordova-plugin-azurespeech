@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-azurespeech" version="0.0.1">
+    <name>Azure Speech</name>
+
+    <description>An Android and iOS Cordova plugin that allows communication with Azure Speech Services.</description>
+    <license>MIT</license>
+
+    <keywords>cordova,android,ios,speech,recognition,utterance,azure,synthesis</keywords>
+    <repo>https://github.com/einvik/cordova-plugin-azurespeech</repo>
+    <issue>https://github.com/einvik/cordova-plugin-azurespeech/issues</issue>
+  
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+    </engines>
+  
+    <js-module src="www/speech.js" name="azureSpeech">
+        <clobbers target="window.plugins.azureSpeech" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AzureSpeech">
+                <param name="android-package" value="com.einvik.cordova.plugin.azurespeech"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/AzureSpeech.java" target-dir="src/com/einvik/cordova/plugin" />
+    </platform>
+</plugin>
