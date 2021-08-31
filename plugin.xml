@@ -25,6 +25,6 @@
             </feature>
         </config-file>
 
-        <source-file src="src/android/AzureSpeech.java" target-dir="src/com/einvik/cordova/plugin/azurespeech/AzureSpeech" />
+        <source-file src="src/Android/AzureSpeech.java" target-dir="src/com/einvik/cordova/plugin/azurespeech" />
     </platform>
 </plugin>
