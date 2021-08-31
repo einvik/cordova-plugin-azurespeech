@@ -26,8 +26,7 @@ public class AzureSpeech extends CordovaPlugin {
         return false;
       }
       // Create the toast
-      Toast toast = Toast.makeText(cordova.getActivity(), message,
-         Toast.LENGTH_LONG;
+      Toast toast = Toast.makeText(cordova.getActivity(), message, Toast.LENGTH_LONG);
       // Display toast
       toast.show();
       // Send a positive result to the callbackContext
