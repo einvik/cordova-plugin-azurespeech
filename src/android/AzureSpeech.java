@@ -38,5 +38,6 @@ public class AzureSpeech extends CordovaPlugin {
 
         SpeechSynthesizer synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
         synthesizer.SpeakText(options.getString("Message"));
+        return true;
   }
 }
