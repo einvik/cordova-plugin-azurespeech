@@ -1,5 +1,5 @@
 repositories {
-   'https://csspeechstorage.blob.core.windows.net/maven/'
+   url 'https://csspeechstorage.blob.core.windows.net/maven/'
 }
 
 dependencies {
