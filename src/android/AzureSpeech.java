@@ -27,7 +27,7 @@ public class AzureSpeech extends CordovaPlugin {
       switch(action) {
         case "recognize":
         try {
-          for (int i = 0; i < 5; i++) {
+          for (Integer i = 0; i < 5; i++) {
             String msg = i.toString();
             callbackContext.success(msg);
             TimeUnit.MINUTES.sleep(1);
