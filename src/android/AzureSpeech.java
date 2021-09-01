@@ -13,23 +13,34 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+// import android.Manifest;
+import java.util.concurrent.TimeUnit;
+
 public class AzureSpeech extends CordovaPlugin {
   PluginResult pluginResult;
+  SpeechConfig speechConfig;
+  
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
       switch(action) {
-          case "synthesize":
+        case "recognize":
+          for (int i = 0; i < 5; i++) {
+            callbackContext.success(i.toString());
+            TimeUnit.MINUTES.sleep(1);
+          }
+          break;
+        case "synthesize":
           try {
             this.pluginResult = this.Synthesize(args.getJSONObject(0));
+            callbackContext.sendPluginResult(this.pluginResult);
           } 
-          catch(Exception e) {
-            
+          catch(Exception e) 
+          {
             callbackContext.error(e.toString());
             return false;
           }
-            // this.pluginResult = new PluginResult(PluginResult.Status.OK);
-            callbackContext.sendPluginResult(pluginResult);
           break;
           default: 
             callbackContext.error("\"" + action + "\" is not a recognized action.");
@@ -37,11 +48,18 @@ public class AzureSpeech extends CordovaPlugin {
       }
       return true;
   }
-
+  public void InitRecognizer() 
+  {
+    if (this.speechConfig == null) {
+      this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+    }
+  }
   public PluginResult Synthesize(JSONObject options) 
   {
         try {
-          SpeechConfig speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+          if (this.speechConfig == null) {
+            this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+          }
           AudioConfig audioConfig = AudioConfig.fromDefaultSpeakerOutput();
 
           SpeechSynthesizer synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
@@ -50,8 +68,7 @@ public class AzureSpeech extends CordovaPlugin {
         }
         catch(Exception e) 
         {
-          
-                  return new PluginResult(PluginResult.Status.ERROR);
+          return new PluginResult(PluginResult.Status.ERROR);
         }
   }
 }
