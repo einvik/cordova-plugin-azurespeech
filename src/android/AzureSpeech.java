@@ -57,12 +57,12 @@ public class AzureSpeech extends CordovaPlugin {
       }
       return true;
   }
-  public void InitRecognizer() 
-  {
-    if (this.speechConfig == null) {
-      this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
-    }
-  }
+  // public void InitRecognizer() 
+  // {
+  //   if (this.speechConfig == null) {
+  //     this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+  //   }
+  // }
   public PluginResult Synthesize(JSONObject options) 
   {
         try {
