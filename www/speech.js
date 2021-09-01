@@ -10,6 +10,14 @@ AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Mess
   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesize', [options]);
 }
 
+AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, Message, successCallback, errorCallback) {
+    var options = {};
+    options.SubscriptionKey = SubscriptionKey;
+    options.ServiceRegion = ServiceRegion;
+    options.Message = Message;
+    cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
+  }
+
 // Installation constructor that binds ToastyPlugin to window
 AzureSpeech.install = function() {
   if (!window.plugins) {
