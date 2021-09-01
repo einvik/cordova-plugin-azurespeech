@@ -3,5 +3,5 @@ repositories {
 }
 
 dependencies {
-    compile 'com.microsoft.cognitiveservices.speech:client-sdk:1.18.0'
+    compile 'com.microsoft.cognitiveservices.speech:client-sdk:1.15.0'
 }
