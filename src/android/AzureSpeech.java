@@ -20,8 +20,15 @@ public class AzureSpeech extends CordovaPlugin {
   {
       switch(action) {
           case "synthesize":
-            // this.pluginResult = this.Synthesize(args.getJSONObject(0));
-            this.pluginResult = new PluginResult(PluginResult.Status.OK);
+          try {
+            this.pluginResult = this.Synthesize(args.getJSONObject(0));
+          } 
+          catch(Exception e) {
+            
+            callbackContext.error(e.toString());
+            return false;
+          }
+            // this.pluginResult = new PluginResult(PluginResult.Status.OK);
             callbackContext.sendPluginResult(pluginResult);
           break;
           default: 
@@ -43,6 +50,7 @@ public class AzureSpeech extends CordovaPlugin {
         }
         catch(Exception e) 
         {
+          
                   return new PluginResult(PluginResult.Status.ERROR);
         }
   }
