@@ -15,7 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 // import android.Manifest;
-import java.util.concurrent.TimeUnit;
 
 public class AzureSpeech extends CordovaPlugin {
   PluginResult pluginResult;
@@ -30,7 +29,6 @@ public class AzureSpeech extends CordovaPlugin {
           for (Integer i = 0; i < 5; i++) {
             String msg = i.toString();
             callbackContext.success(msg);
-            TimeUnit.MINUTES.sleep(1);
           }
         } 
         catch(Exception e) 
