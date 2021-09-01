@@ -1,0 +1,7 @@
+repositories {
+   'https://csspeechstorage.blob.core.windows.net/maven/'
+}
+
+dependencies {
+    compile 'com.microsoft.cognitiveservices.speech:client-sdk:1.18.0'
+}
