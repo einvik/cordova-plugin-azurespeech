@@ -26,10 +26,19 @@ public class AzureSpeech extends CordovaPlugin {
   {
       switch(action) {
         case "recognize":
+        try {
           for (int i = 0; i < 5; i++) {
-            callbackContext.success(i.toString());
+            String msg = i.toString();
+            callbackContext.success(msg);
             TimeUnit.MINUTES.sleep(1);
           }
+        } 
+        catch(Exception e) 
+        {
+          callbackContext.error(e.toString());
+          return false;
+        }
+    
           break;
         case "synthesize":
           try {
