@@ -14,30 +14,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 public class AzureSpeech extends CordovaPlugin {
+  PluginResult pluginResult;
   @Override
-  public boolean execute(String action, JSONArray args,
-    final CallbackContext callbackContext) {
+  public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
+  {
       switch(action) {
           case "synthesise":
-            this.Synthesize(args);
+            this.pluginResult = this.Synthesize(args.getJSONObject(0));
           break;
           default: 
             callbackContext.error("\"" + action + "\" is not a recognized action.");
             return false;
       }
-
-      PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
-      callbackContext.sendPluginResult(pluginResult);
       return true;
   }
 
-  public boolean Synthesize(JSONArray args) {
-        JSONObject options = args.getJSONObject(0);
-        SpeechConfig speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion") );
-         AudioConfig audioConfig = AudioConfig.fromDefaultSpeakerOutput();
+  public PluginResult Synthesize(JSONObject options) 
+  {
+        try {
+          SpeechConfig speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion") );
+          AudioConfig audioConfig = AudioConfig.fromDefaultSpeakerOutput();
 
-        SpeechSynthesizer synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
-        synthesizer.SpeakText(options.getString("Message"));
-        return true;
+          SpeechSynthesizer synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
+          synthesizer.SpeakText(options.getString("Message"));
+          return new PluginResult(PluginResult.Status.OK);
+        }
+        catch(Exception e) 
+        {
+                  return new PluginResult(PluginResult.Status.ERROR);
+        }
   }
 }
