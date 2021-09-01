@@ -7,7 +7,7 @@ AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Mess
   options.SubscriptionKey = SubscriptionKey;
   options.ServiceRegion = ServiceRegion;
   options.Message = Message;
-  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesise', [options]);
+  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesize', [options]);
 }
 
 // Installation constructor that binds ToastyPlugin to window

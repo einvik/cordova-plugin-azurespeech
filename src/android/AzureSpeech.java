@@ -18,9 +18,14 @@ public class AzureSpeech extends CordovaPlugin {
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
+    if (args.size() == 0)  {
+      callbackContext.error("args is empty.");
+      return false;
+    }
       switch(action) {
-          case "synthesise":
+          case "synthesize":
             this.pluginResult = this.Synthesize(args.getJSONObject(0));
+            callbackContext.success(this.pluginResult)
           break;
           default: 
             callbackContext.error("\"" + action + "\" is not a recognized action.");
