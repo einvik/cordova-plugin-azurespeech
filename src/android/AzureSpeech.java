@@ -22,7 +22,7 @@ public class AzureSpeech extends CordovaPlugin {
           case "synthesize":
             // this.pluginResult = this.Synthesize(args.getJSONObject(0));
             this.pluginResult = new PluginResult(PluginResult.Status.OK);
-            callbackContext.success(this.pluginResult)
+            callbackContext.success(this.pluginResult);
           break;
           default: 
             callbackContext.error("\"" + action + "\" is not a recognized action.");
@@ -34,7 +34,7 @@ public class AzureSpeech extends CordovaPlugin {
   public PluginResult Synthesize(JSONObject options) 
   {
         try {
-          SpeechConfig speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion") );
+          SpeechConfig speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
           AudioConfig audioConfig = AudioConfig.fromDefaultSpeakerOutput();
 
           SpeechSynthesizer synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
