@@ -28,7 +28,7 @@ public class AzureSpeech extends CordovaPlugin {
         try {
           for (Integer i = 0; i < 5; i++) {
             String msg = i.toString();
-            this.pluginResult = new PluginResult(PluginResult.Status.OK, msg)
+            this.pluginResult = new PluginResult(PluginResult.Status.OK, msg);
             this.pluginResult.setKeepCallback(true);
 
             callbackContext.sendPluginResult();
