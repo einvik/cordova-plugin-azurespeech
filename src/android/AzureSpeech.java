@@ -22,7 +22,7 @@ public class AzureSpeech extends CordovaPlugin {
           case "synthesize":
             // this.pluginResult = this.Synthesize(args.getJSONObject(0));
             this.pluginResult = new PluginResult(PluginResult.Status.OK);
-            callbackContext.success(this.pluginResult);
+            callbackContext.sendPluginResult(pluginResult);
           break;
           default: 
             callbackContext.error("\"" + action + "\" is not a recognized action.");
