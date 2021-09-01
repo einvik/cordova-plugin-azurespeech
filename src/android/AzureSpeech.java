@@ -31,7 +31,7 @@ public class AzureSpeech extends CordovaPlugin {
             this.pluginResult = new PluginResult(PluginResult.Status.OK, msg);
             this.pluginResult.setKeepCallback(true);
 
-            callbackContext.sendPluginResult();
+            callbackContext.sendPluginResult(this.pluginResult);
           }
         } 
         catch(Exception e) 
