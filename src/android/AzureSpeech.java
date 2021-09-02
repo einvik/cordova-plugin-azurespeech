@@ -233,9 +233,8 @@ public class AzureSpeech extends CordovaPlugin {
       }
     }
   }
-}
 
-private class MicrophoneStream extends PullAudioInputStreamCallback {
+  private class MicrophoneStream extends PullAudioInputStreamCallback {
     private final static int SAMPLE_RATE = 16000;
     private final AudioStreamFormat format;
     private AudioRecord recorder;
@@ -274,4 +273,6 @@ private class MicrophoneStream extends PullAudioInputStreamCallback {
 
         this.recorder.startRecording();
     }
+}
+
 }
