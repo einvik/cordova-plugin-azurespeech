@@ -150,9 +150,17 @@ public class AzureSpeech extends CordovaPlugin {
 }
 
   private void SendTranscriptToClient(String Transcript,String EventName) {
-    JSONObject info = new JSONObject();
-    info.put(EventName,Transcript);
-    this.SendRecognizerUpdate(info);
+    try 
+    {
+      JSONObject info = new JSONObject();
+      info.put(EventName,Transcript);
+      this.SendRecognizerUpdate(info);
+    } 
+    catch (JSONException e) 
+    {
+      callbackContext.error(e.getMessage());
+    }
+
   }
 
   public PluginResult Synthesize(JSONObject options) 
