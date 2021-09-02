@@ -93,40 +93,35 @@ public class AzureSpeech extends CordovaPlugin {
     if (action.equals("recognize")) 
     {
       try {
-        cordova.getThreadPool().execute(new Runnable() {
-          public void run() {
-    
-            if (this.speechConfig == null) {
-              JSONObject options = args.getJSONObject(0);
-              this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
-            }
-            this.recognizerCallbackContext = callbackContext;
-       
-            AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
-            speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
-            
-            speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
-            Log.e(LOG_TAG,"recognizing");
-    
-              String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-              SendTranscriptToClient(Transcript, "recognizing");
-    
-            });
-    
-            speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
-              String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-             Log.e(LOG_TAG,"recognized");
-    
-              SendTranscriptToClient(Transcript, "recognized");
-          });
-            Future<Void> task = speechRecognition.startContinuousRecognitionAsync();
-    
-            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
-            pluginResult.setKeepCallback(Boolean.TRUE);
-            callbackContext.sendPluginResult(pluginResult);
-          }
-      });
+        if (this.speechConfig == null) {
+          JSONObject options = args.getJSONObject(0);
+          this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+        }
+        this.recognizerCallbackContext = callbackContext;
+   
+        AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
+        speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
+        speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          Log.e(LOG_TAG,"recognizing");
+
+          String Transcript = speechRecognitionResultEventArgs.getResult().getText();
+          SendTranscriptToClient(Transcript, "recognizing");
+
+        });
+
+        speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          String Transcript = speechRecognitionResultEventArgs.getResult().getText();
+          Log.e(LOG_TAG,"recognized");
+
+          SendTranscriptToClient(Transcript, "recognized");
+        });
+        
+        Future<Void> task = speechRecognition.startContinuousRecognitionAsync();
+
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
+        pluginResult.setKeepCallback(Boolean.TRUE);
+        callbackContext.sendPluginResult(pluginResult);
         return true;
       } 
       catch(Exception e) 
