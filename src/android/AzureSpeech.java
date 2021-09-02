@@ -1,5 +1,7 @@
 package com.einvik.cordova.plugin.azurespeech;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
@@ -24,7 +26,7 @@ import android.util.Log;
 public class AzureSpeech extends CordovaPlugin {
 
   private static final String LOG_TAG = "AzureSpeech";
-
+  private static final boolean DEBUGMODE = Boolean.TRUE;
   CallbackContext callbackContext;
   CallbackContext getPermissionCallbackContext;
 
@@ -42,7 +44,11 @@ public class AzureSpeech extends CordovaPlugin {
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
-    
+    if (DEBUGMODE) 
+    {
+      Log.d(LOG_TAG,"action: " + action);
+      Log.d(LOG_TAG,"arguments: " + args.toString());
+    }
     if (action.equals("hasPermission")) 
     {
       try 
