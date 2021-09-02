@@ -37,7 +37,6 @@ public class AzureSpeech extends CordovaPlugin {
   public static int PERMISSION_DENIED_ERROR = 400;
 
   MicrophoneStream microphoneStream;
-   
 
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
@@ -103,7 +102,7 @@ public class AzureSpeech extends CordovaPlugin {
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
           SendTranscriptToClient(Transcript, "recognized");
       });
-        Future<SpeechRecognitionResult> task = speechRecognition.startContinuousRecognitionAsync();
+        Future<Void> task = speechRecognition.startContinuousRecognitionAsync();
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
         callbackContext.sendPluginResult(pluginResult);
@@ -144,7 +143,7 @@ public class AzureSpeech extends CordovaPlugin {
 }
 
   private void SendTranscriptToClient(String Transcript,String EventName) {
-    var info = new JSONObject();
+    JSONObject info = new JSONObject();
     info.put(EventName,Transcript);
     this.SendRecognizerUpdate(info);
   }

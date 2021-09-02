@@ -24,11 +24,11 @@
                 <param name="android-package" value="com.einvik.cordova.plugin.azurespeech.AzureSpeech"/>
             </feature>
             <feature name="MicroPhoneStream">
-                <param name="android-package" value="com.einvik.cordova.plugin.azurespeech.MicrophoneStream"/>
+                <param name="android-package" value="com.einvik.cordova.plugin.azurespeechcapture.MicrophoneStream"/>
             </feature>
         </config-file>
         <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
         <source-file src="src/android/AzureSpeech.java" target-dir="src/com/einvik/cordova/plugin/azurespeech" />
-        <source-file src="src/android/MicroPhoneStream.java" target-dir="src/com/einvik/cordova/plugin/microphonestream" />
+        <source-file src="src/android/MicrophoneStream.java" target-dir="src/com/einvik/cordova/plugin/azurespeechcapture" />
     </platform>
 </plugin>
