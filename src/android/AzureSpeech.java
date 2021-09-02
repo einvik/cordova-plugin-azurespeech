@@ -88,7 +88,7 @@ public class AzureSpeech extends CordovaPlugin {
         callbackContext.error("getpermission" + e.getMessage());
       }
     }
-    if (action.equals("regognize")) 
+    if (action.equals("recognize")) 
     {
       try {
         if (this.speechConfig == null) {
