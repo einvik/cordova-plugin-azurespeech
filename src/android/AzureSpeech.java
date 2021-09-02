@@ -6,6 +6,12 @@ import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisOutputFormat;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+import com.microsoft.cognitiveservices.speech.audio.PullAudioInputStreamCallback;
+import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
+
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -18,35 +24,28 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import org.apache.cordova.PermissionHelper;
 
-// For debug
-import android.util.Log;
-
 public class AzureSpeech extends CordovaPlugin {
 
   private static final String LOG_TAG = "AzureSpeech";
   private static final boolean DEBUGMODE = Boolean.TRUE;
   CallbackContext callbackContext;
   CallbackContext getPermissionCallbackContext;
+  CallbackContext recognizerCallbackContext;
 
   SpeechConfig speechConfig;
+  SpeechRecognizer speechRecognition;
   String speechRecognitionLanguage = "en-US";
   String speechSubscriptionKey = "";
   String serviceRegion = "";
-  
-  // Permissions
 
   public static String[] permissions = { Manifest.permission.RECORD_AUDIO };
   public static int RECORD_AUDIO = 0;
   public static int PERMISSION_DENIED_ERROR = 400;
+   
 
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
-    if (DEBUGMODE) 
-    {
-      Log.d(LOG_TAG,"action: " + action);
-      Log.d(LOG_TAG,"arguments: " + args.toString());
-    }
     if (action.equals("hasPermission")) 
     {
       try 
@@ -57,8 +56,7 @@ public class AzureSpeech extends CordovaPlugin {
       }
       catch (Exception e) 
       {
-        Log.e(LOG_TAG,e.getMessage(),e);
-        // callbackContext.error(e.toString());
+        callbackContext.error(e.getMessage());
       }
     }
 
@@ -86,23 +84,40 @@ public class AzureSpeech extends CordovaPlugin {
       catch (Exception e) 
       {
         callbackContext.error(e.getMessage());
-        Log.e(LOG_TAG,e.getMessage(),e);
-
       }
     }
-    // if (action.equals("regognize")) 
-    // {
-    //   try {
-    //     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
-    //     callbackContext.sendPluginResult(pluginResult);
-    //     return true;
-    //   } 
-    //   catch(Exception e) 
-    //   {
-    //     callbackContext.error(e.toString());
-    //     return false;
-    //   }
-    // }
+    if (action.equals("regognize")) 
+    {
+      try {
+        if (this.speechConfig == null) {
+          this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+        }
+        this.recognizerCallbackContext = callbackContext;
+        AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
+        speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
+        
+        speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          String Transcript = speechRecognitionResultEventArgs.getResult().getText();
+          SendTranscriptToClient(Transcript, "recognized");
+
+        });
+
+        speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          String s = speechRecognitionResultEventArgs.getResult().getText();
+          SendTranscriptToClient(Transcript, "recognized");
+      });
+        Future<SpeechRecognitionResult> task = speechRecognition.startContinuousRecognitionAsync();
+
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
+        callbackContext.sendPluginResult(pluginResult);
+        return true;
+      } 
+      catch(Exception e) 
+      {
+        callbackContext.error(e.toString());
+        return false;
+      }
+    }
 
     if (action.equals("synthesize")) 
     {
@@ -113,22 +128,30 @@ public class AzureSpeech extends CordovaPlugin {
       } 
       catch(Exception e) 
       {
-        callbackContext.error(e.toString());
-        Log.e(LOG_TAG,e.getMessage(),e);
-
-        return false;
+        callbackContext.error(e.getMessage());
       }
     }
      
 
       return false;
   }
-  // public void InitRecognizer() 
-  // {
-  //   if (this.speechConfig == null) {
-  //     this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
-  //   }
-  // }
+
+  private MicrophoneStream createMicrophoneStream() {
+    if (this.microphoneStream != null) {
+        this.microphoneStream.close();
+        this.microphoneStream = null;
+    }
+
+    this.microphoneStream = new MicrophoneStream();
+    return microphoneStream;
+}
+
+  private void SendTranscriptToClient(String Transcript,String EventName) {
+    var info = new JSONObject();
+    info.put(EventName,Transcript);
+    this.SendRecognizerUpdate(info);
+  }
+
   public PluginResult Synthesize(JSONObject options) 
   {
         try {
@@ -143,14 +166,10 @@ public class AzureSpeech extends CordovaPlugin {
         }
         catch(Exception e) 
         {
-        Log.e(LOG_TAG,e.getMessage(),e);
-
-          return new PluginResult(PluginResult.Status.ERROR);
+          return new PluginResult(PluginResult.Status.ERROR,e.getMessage());
         }
   }
 
-  
-  
   private void SendUpdate(JSONObject info, boolean keepCallBack) 
   {
     if (this.callbackContext != null) 
@@ -158,6 +177,16 @@ public class AzureSpeech extends CordovaPlugin {
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, info);
         pluginResult.setKeepCallback(keepCallBack);
         this.callbackContext.sendPluginResult(pluginResult);
+    }
+  }
+  
+  private void SendRecognizerUpdate(JSONObject info) 
+  {
+    if (this.recognizerCallbackContext != null) 
+    {
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, info);
+        pluginResult.setKeepCallback(Boolean.TRUE);
+        this.recognizerCallbackContext.sendPluginResult(pluginResult);
     }
   }
   public boolean HasMicPermission() 
@@ -199,7 +228,47 @@ public class AzureSpeech extends CordovaPlugin {
           this.getPermissionCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, Boolean.TRUE));
         }
       }
-     
     }
+  }
+}
+
+public class MicrophoneStream extends PullAudioInputStreamCallback {
+  private int SAMPLE_RATE = 16000;
+  private final AudioStreamFormat format;
+  private AudioRecord recorder;
+
+  public MicrophoneStream() {
+      this.format = AudioStreamFormat.getWaveFormatPCM(SAMPLE_RATE, (short)16, (short)1);
+      this.initMic();
+  }
+
+  public AudioStreamFormat getFormat() {
+      return this.format;
+  }
+
+  @Override
+  public int read(byte[] bytes) {
+      long ret = this.recorder.read(bytes, 0, bytes.length);
+      return (int)ret;
+  }
+
+  @Override
+  public void close() {
+      this.recorder.release();
+      this.recorder = null;
+  }
+
+  private void initMic() {
+      AudioFormat af = new AudioFormat.Builder()
+              .setSampleRate(SAMPLE_RATE)
+              .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+              .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
+              .build();
+      this.recorder = new AudioRecord.Builder()
+              .setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
+              .setAudioFormat(af)
+              .build();
+
+      this.recorder.startRecording();
   }
 }
