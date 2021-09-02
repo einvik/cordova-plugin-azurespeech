@@ -117,7 +117,7 @@ public class AzureSpeech extends CordovaPlugin {
       } 
       catch(Exception e) 
       {
-        callbackContext.error(e.toString());
+        callbackContext.error("regognize" + e.toString());
         return false;
       }
     }
@@ -158,7 +158,7 @@ public class AzureSpeech extends CordovaPlugin {
     } 
     catch (JSONException e) 
     {
-      callbackContext.error(e.getMessage());
+      recognizerCallbackContext.error("SendTranscriptToClient, " + EventName + ":" + Transcript + e.getMessage());
     }
 
   }
