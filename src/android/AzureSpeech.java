@@ -50,46 +50,46 @@ public class AzureSpeech extends CordovaPlugin {
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
     Log.e(LOG_TAG,action);
-    if (action.equals("hasPermission")) 
-    {
-      try 
-      {
-        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
-        callbackContext.sendPluginResult(pluginResult);
-        return true;
-      }
-      catch (Exception e) 
-      {
-        callbackContext.error("haspermission" + e.getMessage());
-      }
-    }
+    // if (action.equals("hasPermission")) 
+    // {
+    //   try 
+    //   {
+    //     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
+    //     callbackContext.sendPluginResult(pluginResult);
+    //     return true;
+    //   }
+    //   catch (Exception e) 
+    //   {
+    //     callbackContext.error("haspermission" + e.getMessage());
+    //   }
+    // }
 
-    if (action.equals("getPermission")) 
-    {
-      try 
-      {
+    // if (action.equals("getPermission")) 
+    // {
+    //   try 
+    //   {
 
-        if (this.HasMicPermission()) 
-        {
-          PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
-          callbackContext.sendPluginResult(pluginResult);
-          return true;
-        } 
-        else 
-        {
-          this.getPermissionCallbackContext = callbackContext;
-          PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
-          pluginResult.setKeepCallback(true);
-          callbackContext.sendPluginResult(pluginResult);
-          this.GetMicPermission(RECORD_AUDIO);
-        }
+    //     if (this.HasMicPermission()) 
+    //     {
+    //       PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
+    //       callbackContext.sendPluginResult(pluginResult);
+    //       return true;
+    //     } 
+    //     else 
+    //     {
+    //       this.getPermissionCallbackContext = callbackContext;
+    //       PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
+    //       pluginResult.setKeepCallback(true);
+    //       callbackContext.sendPluginResult(pluginResult);
+    //       this.GetMicPermission(RECORD_AUDIO);
+    //     }
       
-      }
-      catch (Exception e) 
-      {
-        callbackContext.error("getpermission" + e.getMessage());
-      }
-    }
+    //   }
+    //   catch (Exception e) 
+    //   {
+    //     callbackContext.error("getpermission" + e.getMessage());
+    //   }
+    // }
     if (action.equals("recognize")) 
     {
       try {
@@ -102,7 +102,7 @@ public class AzureSpeech extends CordovaPlugin {
         speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
         speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
-    Log.e(LOG_TAG,"recognizing");
+        Log.e(LOG_TAG,"recognizing");
 
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
           SendTranscriptToClient(Transcript, "recognizing");
@@ -111,7 +111,7 @@ public class AzureSpeech extends CordovaPlugin {
 
         speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-    Log.e(LOG_TAG,"recognized");
+         Log.e(LOG_TAG,"recognized");
 
           SendTranscriptToClient(Transcript, "recognized");
       });
@@ -129,18 +129,18 @@ public class AzureSpeech extends CordovaPlugin {
       }
     }
 
-    if (action.equals("synthesize")) 
-    {
-      try {
-        PluginResult pluginResult = this.Synthesize(args.getJSONObject(0));
-        callbackContext.sendPluginResult(pluginResult);
-        return true;
-      } 
-      catch(Exception e) 
-      {
-        callbackContext.error("synth" + e.getMessage());
-      }
-    }
+    // if (action.equals("synthesize")) 
+    // {
+    //   try {
+    //     PluginResult pluginResult = this.Synthesize(args.getJSONObject(0));
+    //     callbackContext.sendPluginResult(pluginResult);
+    //     return true;
+    //   } 
+    //   catch(Exception e) 
+    //   {
+    //     callbackContext.error("synth" + e.getMessage());
+    //   }
+    // }
      
 
       return false;

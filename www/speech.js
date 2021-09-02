@@ -1,19 +1,19 @@
 function AzureSpeech() {}
 
-AzureSpeech.prototype.HasPermission = function(successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'hasPermission', []);
-}
-AzureSpeech.prototype.GetPermission = function(successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'getPermission', []);
-}
+// AzureSpeech.prototype.HasPermission = function(successCallback, errorCallback) {
+//   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'hasPermission', []);
+// }
+// AzureSpeech.prototype.GetPermission = function(successCallback, errorCallback) {
+//   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'getPermission', []);
+// }
 
-AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Message, successCallback, errorCallback) {
-  var options = {};
-  options.SubscriptionKey = SubscriptionKey;
-  options.ServiceRegion = ServiceRegion;
-  options.Message = Message;
-  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesize', [options]);
-}
+// AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Message, successCallback, errorCallback) {
+//   var options = {};
+//   options.SubscriptionKey = SubscriptionKey;
+//   options.ServiceRegion = ServiceRegion;
+//   options.Message = Message;
+//   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesize', [options]);
+// }
 
 AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, successCallback, errorCallback) {
     var options = {};
