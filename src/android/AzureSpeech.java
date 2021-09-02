@@ -101,7 +101,7 @@ public class AzureSpeech extends CordovaPlugin {
    
         // AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
 
-        AudioConfig audioInput = AudioConfig.FromDefaultMicrophoneInput();
+        AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
         speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
         speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
