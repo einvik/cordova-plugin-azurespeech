@@ -131,7 +131,7 @@ public class AzureSpeech extends CordovaPlugin {
       } 
       catch(Exception e) 
       {
-        callbackContext.error(e.getMessage());
+        callbackContext.error("synth" + e.getMessage());
       }
     }
      
