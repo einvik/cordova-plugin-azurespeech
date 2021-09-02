@@ -112,6 +112,7 @@ public class AzureSpeech extends CordovaPlugin {
         Future<Void> task = speechRecognition.startContinuousRecognitionAsync();
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
+        pluginResult.keepCallback(true);
         callbackContext.sendPluginResult(pluginResult);
         return true;
       } 
