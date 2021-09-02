@@ -25,6 +25,7 @@ import android.media.MediaRecorder;
 import com.microsoft.cognitiveservices.speech.audio.PullAudioInputStreamCallback;
 import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
 
+import android.util.Log;
 public class AzureSpeech extends CordovaPlugin {
 
   private static final String LOG_TAG = "AzureSpeech";
@@ -48,6 +49,7 @@ public class AzureSpeech extends CordovaPlugin {
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
+    Log.e(LOG_TAG,action);
     if (action.equals("hasPermission")) 
     {
       try 
@@ -100,6 +102,8 @@ public class AzureSpeech extends CordovaPlugin {
         speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
         speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
+    Log.e(LOG_TAG,"recognizing");
+
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
           SendTranscriptToClient(Transcript, "recognizing");
 
@@ -107,6 +111,8 @@ public class AzureSpeech extends CordovaPlugin {
 
         speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
+    Log.e(LOG_TAG,"recognized");
+
           SendTranscriptToClient(Transcript, "recognized");
       });
         Future<Void> task = speechRecognition.startContinuousRecognitionAsync();
