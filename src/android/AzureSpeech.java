@@ -58,7 +58,7 @@ public class AzureSpeech extends CordovaPlugin {
       }
       catch (Exception e) 
       {
-        callbackContext.error(e.getMessage());
+        callbackContext.error("haspermission" + e.getMessage());
       }
     }
 
@@ -85,7 +85,7 @@ public class AzureSpeech extends CordovaPlugin {
       }
       catch (Exception e) 
       {
-        callbackContext.error(e.getMessage());
+        callbackContext.error("getpermission" + e.getMessage());
       }
     }
     if (action.equals("regognize")) 
