@@ -18,7 +18,13 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import org.apache.cordova.PermissionHelper;
 
+// For debug
+import android.util.Log;
+
 public class AzureSpeech extends CordovaPlugin {
+
+  private static final String LOG_TAG = "AzureSpeech";
+
   CallbackContext callbackContext;
   CallbackContext getPermissionCallbackContext;
 
@@ -47,7 +53,8 @@ public class AzureSpeech extends CordovaPlugin {
       }
       catch (Exception e) 
       {
-        callbackContext.error(e.toString());
+        Log.e(LOG_TAG,e.getMessage(),e);
+        // callbackContext.error(e.toString());
       }
     }
 
@@ -74,7 +81,9 @@ public class AzureSpeech extends CordovaPlugin {
       }
       catch (Exception e) 
       {
-        callbackContext.error(e.toString());
+        callbackContext.error(e.getMessage());
+        Log.e(LOG_TAG,e.getMessage(),e);
+
       }
     }
     // if (action.equals("regognize")) 
@@ -101,6 +110,8 @@ public class AzureSpeech extends CordovaPlugin {
       catch(Exception e) 
       {
         callbackContext.error(e.toString());
+        Log.e(LOG_TAG,e.getMessage(),e);
+
         return false;
       }
     }
@@ -128,6 +139,8 @@ public class AzureSpeech extends CordovaPlugin {
         }
         catch(Exception e) 
         {
+        Log.e(LOG_TAG,e.getMessage(),e);
+
           return new PluginResult(PluginResult.Status.ERROR);
         }
   }
@@ -138,7 +151,7 @@ public class AzureSpeech extends CordovaPlugin {
   {
     if (this.callbackContext != null) 
     {
-        PluginResult pluginResult = new PluginResult(PluginResult.Status.Ok, info);
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, info);
         pluginResult.setKeepCallBack(keepCallBack);
         this.callbackContext.sendPluginResult(pluginResult);
     }
@@ -162,7 +175,7 @@ public class AzureSpeech extends CordovaPlugin {
       {
         if (this.getPermissionCallbackContext == null) 
         {
-          this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.Error, PERMISSON_DENIED_ERROR));
+          this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, PERMISSION_DENIED_ERROR));
           return;
         } 
         else 
