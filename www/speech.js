@@ -15,11 +15,10 @@ AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Mess
   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesize', [options]);
 }
 
-AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, Message, successCallback, errorCallback) {
+AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, successCallback, errorCallback) {
     var options = {};
     options.SubscriptionKey = SubscriptionKey;
     options.ServiceRegion = ServiceRegion;
-    options.Message = Message;
     cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
   }
 AzureSpeech.install = function() {
