@@ -1,19 +1,10 @@
 package com.einvik.cordova.plugin.azurespeech;
 
-import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
-import com.microsoft.cognitiveservices.speech.SpeechSynthesisOutputFormat;
-import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
 import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
-import com.microsoft.cognitiveservices.speech.audio.PullAudioInputStreamCallback;
-import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
-
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -235,46 +226,5 @@ public class AzureSpeech extends CordovaPlugin {
         }
       }
     }
-  }
-}
-
-public class MicrophoneStream extends PullAudioInputStreamCallback {
-  private int SAMPLE_RATE = 16000;
-  private final AudioStreamFormat format;
-  private AudioRecord recorder;
-
-  public MicrophoneStream() {
-      this.format = AudioStreamFormat.getWaveFormatPCM(SAMPLE_RATE, (short)16, (short)1);
-      this.initMic();
-  }
-
-  public AudioStreamFormat getFormat() {
-      return this.format;
-  }
-
-  @Override
-  public int read(byte[] bytes) {
-      long ret = this.recorder.read(bytes, 0, bytes.length);
-      return (int)ret;
-  }
-
-  @Override
-  public void close() {
-      this.recorder.release();
-      this.recorder = null;
-  }
-
-  private void initMic() {
-      AudioFormat af = new AudioFormat.Builder()
-              .setSampleRate(SAMPLE_RATE)
-              .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-              .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
-              .build();
-      this.recorder = new AudioRecord.Builder()
-              .setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
-              .setAudioFormat(af)
-              .build();
-
-      this.recorder.startRecording();
   }
 }
