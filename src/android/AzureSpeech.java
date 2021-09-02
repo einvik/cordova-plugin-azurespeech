@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.pm.PackageManager;
+import android.Manifest;
 import org.apache.cordova.PermissionHelper;
 
 public class AzureSpeech extends CordovaPlugin {
@@ -26,6 +27,12 @@ public class AzureSpeech extends CordovaPlugin {
   String speechSubscriptionKey = "";
   String serviceRegion = "";
   
+  // Permissions
+
+  public static String[] permissions = { Manifest.permission.RECORD_AUDIO };
+  public static int RECORD_AUDIO = 0;
+  public static int PERMISSION_DENIED_ERROR = 400;
+
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
