@@ -5,6 +5,8 @@ import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisOutputFormat;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
+import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
+import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.audio.PullAudioInputStreamCallback;
 import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import android.content.pm.PackageManager;
 import android.Manifest;
 import org.apache.cordova.PermissionHelper;
+import java.util.concurrent.Future;
 
 public class AzureSpeech extends CordovaPlugin {
 
@@ -41,6 +44,8 @@ public class AzureSpeech extends CordovaPlugin {
   public static String[] permissions = { Manifest.permission.RECORD_AUDIO };
   public static int RECORD_AUDIO = 0;
   public static int PERMISSION_DENIED_ERROR = 400;
+
+  MicrophoneStream microphoneStream;
    
 
   @Override
@@ -90,6 +95,7 @@ public class AzureSpeech extends CordovaPlugin {
     {
       try {
         if (this.speechConfig == null) {
+          JSONObject options = args.getJSONObject(0);
           this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
         }
         this.recognizerCallbackContext = callbackContext;
@@ -98,12 +104,12 @@ public class AzureSpeech extends CordovaPlugin {
         
         speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-          SendTranscriptToClient(Transcript, "recognized");
+          SendTranscriptToClient(Transcript, "recognizing");
 
         });
 
         speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          String s = speechRecognitionResultEventArgs.getResult().getText();
+          String Transcript = speechRecognitionResultEventArgs.getResult().getText();
           SendTranscriptToClient(Transcript, "recognized");
       });
         Future<SpeechRecognitionResult> task = speechRecognition.startContinuousRecognitionAsync();
