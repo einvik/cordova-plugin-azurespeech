@@ -73,7 +73,7 @@ public class AzureSpeech extends CordovaPlugin {
         {
           this.getPermissionCallbackContext = callbackContext;
           PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
-          pluginResult.setKeepCallBack(true);
+          pluginResult.setKeepCallback(true);
           callbackContext.sendPluginResult(pluginResult);
           this.GetMicPermission(RECORD_AUDIO);
         }
@@ -152,7 +152,7 @@ public class AzureSpeech extends CordovaPlugin {
     if (this.callbackContext != null) 
     {
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, info);
-        pluginResult.setKeepCallBack(keepCallBack);
+        pluginResult.setKeepCallback(keepCallBack);
         this.callbackContext.sendPluginResult(pluginResult);
     }
   }
