@@ -1,7 +1,5 @@
 package com.einvik.cordova.plugin.azurespeech;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
