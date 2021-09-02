@@ -14,49 +14,66 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// import android.Manifest;
+import android.content.pm.PackageManager;
+import org.apache.cordova.PermissionHelper;
 
 public class AzureSpeech extends CordovaPlugin {
-  PluginResult pluginResult;
+  CallbackContext callbackContext;
   SpeechConfig speechConfig;
+  String speechRecognitionLanguage = "en-US";
+  String speechSubscriptionKey = "";
+  String serviceRegion = "";
   
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
-      switch(action) {
-        case "recognize":
-        try {
-          for (Integer i = 0; i < 5; i++) {
-            String msg = i.toString();
-            this.pluginResult = new PluginResult(PluginResult.Status.OK, msg);
-            this.pluginResult.setKeepCallback(true);
+    this.callbackContext = callbackContext;
 
-            callbackContext.sendPluginResult(this.pluginResult);
-          }
-        } 
-        catch(Exception e) 
-        {
-          callbackContext.error(e.toString());
-          return false;
-        }
-    
-          break;
-        case "synthesize":
-          try {
-            this.pluginResult = this.Synthesize(args.getJSONObject(0));
-            callbackContext.sendPluginResult(this.pluginResult);
-          } 
-          catch(Exception e) 
-          {
-            callbackContext.error(e.toString());
-            return false;
-          }
-          break;
-          default: 
-            callbackContext.error("\"" + action + "\" is not a recognized action.");
-            return false;
+    if (action.equals("hasPermission")) 
+    {
+      try 
+      {
+
+        JSONObject _Response = new JSONObject();
+        _Response.put("hasPermission", this.HasMicPermission());
+        SendUpdate(_Response, false);
+        return true;
       }
-      return true;
+      catch (Exception e) 
+      {
+        callbackContext.error(e.toString());
+      }
+    }
+    // if (action.equals("regognize")) 
+    // {
+    //   try {
+    //     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
+    //     callbackContext.sendPluginResult(pluginResult);
+    //     return true;
+    //   } 
+    //   catch(Exception e) 
+    //   {
+    //     callbackContext.error(e.toString());
+    //     return false;
+    //   }
+    // }
+
+    if (action.equals("synthesize")) 
+    {
+      try {
+        PluginResult pluginResult = this.Synthesize(args.getJSONObject(0));
+        callbackContext.sendPluginResult(pluginResult);
+        return true;
+      } 
+      catch(Exception e) 
+      {
+        callbackContext.error(e.toString());
+        return false;
+      }
+    }
+     
+
+      return false;
   }
   // public void InitRecognizer() 
   // {
@@ -80,5 +97,24 @@ public class AzureSpeech extends CordovaPlugin {
         {
           return new PluginResult(PluginResult.Status.ERROR);
         }
+  }
+
+  
+  private void SendUpdate(JSONObject info, boolean keepCallBack) 
+  {
+    if (this.callbackContext != null) 
+    {
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.Ok, info);
+        pluginResult.setKeepCallBack(keepCallBack);
+        this.callbackContext.sendPluginResult(pluginResult)
+    }
+  }
+  public boolean HasMicPermission() 
+  {
+    return PermissionHelper.hasPermission(this, permissions[RECORD_AUDIO]);
+  }
+  protected void GetMicPermission(int requestCode) 
+  {
+    PermissionHelper.requestPermission(this, requestCode, permissions[RECORD_AUDIO]);
   }
 }
