@@ -133,7 +133,7 @@ public class AzureSpeech extends CordovaPlugin {
     {
         PluginResult pluginResult = new PluginResult(PluginResult.Status.Ok, info);
         pluginResult.setKeepCallBack(keepCallBack);
-        this.callbackContext.sendPluginResult(pluginResult)
+        this.callbackContext.sendPluginResult(pluginResult);
     }
   }
   public boolean HasMicPermission() 
