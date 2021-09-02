@@ -93,13 +93,15 @@ public class AzureSpeech extends CordovaPlugin {
     if (action.equals("recognize")) 
     {
       try {
-        if (this.speechConfig == null) {
-          JSONObject options = args.getJSONObject(0);
-          this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
-        }
-        this.recognizerCallbackContext = callbackContext;
         cordova.getThreadPool().execute(new Runnable() {
           public void run() {
+    
+            if (this.speechConfig == null) {
+              JSONObject options = args.getJSONObject(0);
+              this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+            }
+            this.recognizerCallbackContext = callbackContext;
+       
             AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
             speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
             
@@ -124,7 +126,8 @@ public class AzureSpeech extends CordovaPlugin {
             callbackContext.sendPluginResult(pluginResult);
           }
       });
-       
+        
+        return true;
       } 
       catch(Exception e) 
       {
