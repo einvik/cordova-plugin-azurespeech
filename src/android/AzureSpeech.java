@@ -19,6 +19,8 @@ import org.apache.cordova.PermissionHelper;
 
 public class AzureSpeech extends CordovaPlugin {
   CallbackContext callbackContext;
+  CallbackContext getPermissionCallbackContext;
+
   SpeechConfig speechConfig;
   String speechRecognitionLanguage = "en-US";
   String speechSubscriptionKey = "";
@@ -27,17 +29,41 @@ public class AzureSpeech extends CordovaPlugin {
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
-    this.callbackContext = callbackContext;
-
+    
     if (action.equals("hasPermission")) 
     {
       try 
       {
-
-        JSONObject _Response = new JSONObject();
-        _Response.put("hasPermission", this.HasMicPermission());
-        SendUpdate(_Response, false);
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
+        callbackContext.sendPluginResult(pluginResult);
         return true;
+      }
+      catch (Exception e) 
+      {
+        callbackContext.error(e.toString());
+      }
+    }
+
+    if (action.equals("getPermission")) 
+    {
+      try 
+      {
+
+        if (this.HasMicPermission()) 
+        {
+          PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
+          callbackContext.sendPluginResult(pluginResult);
+          return true;
+        } 
+        else 
+        {
+          this.getPermissionCallbackContext = callbackContext;
+          PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
+          pluginResult.setKeepCallBack(true);
+          callbackContext.sendPluginResult(pluginResult);
+          this.GetMicPermission(RECORD_AUDIO);
+        }
+      
       }
       catch (Exception e) 
       {
@@ -100,6 +126,7 @@ public class AzureSpeech extends CordovaPlugin {
   }
 
   
+  
   private void SendUpdate(JSONObject info, boolean keepCallBack) 
   {
     if (this.callbackContext != null) 
@@ -116,5 +143,39 @@ public class AzureSpeech extends CordovaPlugin {
   protected void GetMicPermission(int requestCode) 
   {
     PermissionHelper.requestPermission(this, requestCode, permissions[RECORD_AUDIO]);
+  }
+
+  public void onDestroy() {}
+  public void onReset() {}
+  public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException
+  {
+    for (int result:grantResults) 
+    {
+      if (result == PackageManager.PERMISSION_DENIED) 
+      {
+        if (this.getPermissionCallbackContext == null) 
+        {
+          this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.Error, PERMISSON_DENIED_ERROR));
+          return;
+        } 
+        else 
+        {
+          this.getPermissionCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, Boolean.FALSE));
+        }
+      } 
+      else 
+      {
+        if (this.getPermissionCallbackContext == null) 
+        {
+          this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, Boolean.TRUE));
+          return;
+        } 
+        else 
+        {
+          this.getPermissionCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, Boolean.TRUE));
+        }
+      }
+     
+    }
   }
 }
