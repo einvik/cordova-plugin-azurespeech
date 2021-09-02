@@ -9,7 +9,12 @@ AzureSpeech.prototype.Synthesize = function(SubscriptionKey, ServiceRegion, Mess
   options.Message = Message;
   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'synthesize', [options]);
 }
-
+AzureSpeech.prototype.HasPermission = function(successCallback, errorCallback) {
+  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'hasPermission', []);
+}
+// AzureSpeech.prototype.GetPermission = function(successCallback, errorCallback) {
+//   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'hasPermission', []);
+// }
 AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, Message, successCallback, errorCallback) {
     var options = {};
     options.SubscriptionKey = SubscriptionKey;
