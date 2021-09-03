@@ -1,6 +1,4 @@
-function AzureSpeech() {
-  var isRecognizing = false;
-}
+function AzureSpeech() {}
 
 // AzureSpeech.prototype.HasPermission = function(successCallback, errorCallback) {
 //   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'hasPermission', []);
@@ -21,13 +19,6 @@ AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, succe
     var options = {};
     options.SubscriptionKey = SubscriptionKey;
     options.ServiceRegion = ServiceRegion;
-    this.isRecognizing = true;
-    options.Action = "start";
-
-    if (this.isRegognizing == true) {
-      options.Action = "stop";
-      this.isRecognizing = false;
-    }
 
     cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
   }

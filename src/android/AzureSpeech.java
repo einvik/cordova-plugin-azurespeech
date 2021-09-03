@@ -93,22 +93,22 @@ public class AzureSpeech extends CordovaPlugin {
     if (action.equals("recognize")) 
     {
       try {
-        JSONObject options = args.getJSONObject(0);
-        if (this.speechConfig == null) {
-          this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
-        }
-        if (options.getString("Action").equals("stop"))
-        {
+        if (this.microphoneStream != null) {
           this.speechRecognition.stopContinuousRecognitionAsync();
           this.microphoneStream.close();
-          this.SendTranscriptToClient("Stopping speechrecognition", "");
+          this.microphoneStream = null;
+          this.SendTranscriptToClient("Stopping speechrecognition", "Event");
           return true;
         }
+        
+        if (this.speechConfig == null) {
+          JSONObject options = args.getJSONObject(0);
+          this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
+        }
         this.recognizerCallbackContext = callbackContext;
-        this.SendTranscriptToClient("Starting speechrecognition", "");
+        this.SendTranscriptToClient("Starting speechrecognition", "Event");
 
         AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
-
         // AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
         this.speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
@@ -127,15 +127,10 @@ public class AzureSpeech extends CordovaPlugin {
         });
         
         Future<Void> task = this.speechRecognition.startContinuousRecognitionAsync();
-        setOnTaskCompletedListener(task, result -> {
-          continuousListeningStarted = true;
-          this.runOnUiThread(() -> {
-            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
-            pluginResult.setKeepCallback(Boolean.TRUE);
-            callbackContext.sendPluginResult(pluginResult);
-          });
-        });
 
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
+        pluginResult.setKeepCallback(Boolean.TRUE);
+        callbackContext.sendPluginResult(pluginResult);
         return true;
       } 
       catch(Exception e) 
