@@ -22,7 +22,7 @@ AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, succe
   
   cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
 }
-AzureSpeech.prototype.StopRecognize = function(SubscriptionKey, ServiceRegion, successCallback, errorCallback) {
+AzureSpeech.prototype.StopRecognize = function(successCallback, errorCallback) {
   var options = {};
   options.SubscriptionKey = SubscriptionKey;
   options.ServiceRegion = ServiceRegion;

@@ -121,7 +121,6 @@ public class AzureSpeech extends CordovaPlugin {
         return false;
       }
     }
-
     if (action.equals("synthesize")) 
     {
       try {
@@ -149,7 +148,6 @@ public class AzureSpeech extends CordovaPlugin {
         callbackContext.error("haspermission" + e.getMessage());
       }
     }
-
     if (action.equals("getPermission")) 
     {
       try 
@@ -176,7 +174,6 @@ public class AzureSpeech extends CordovaPlugin {
         callbackContext.error("getpermission" + e.getMessage());
       }
     }
-
       return false;
   }
 
