@@ -99,27 +99,26 @@ public class AzureSpeech extends CordovaPlugin {
         }
         this.recognizerCallbackContext = callbackContext;
    
-        // AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
+        AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
 
-        AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
-        speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
+        // AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
+        this.speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
-        speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
+        this.speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
           Log.e(LOG_TAG,"recognizing");
-
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-          SendTranscriptToClient(Transcript, "recognizing");
+          this.SendTranscriptToClient(Transcript, "recognizing");
 
         });
 
-        speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
+        this.speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
           Log.e(LOG_TAG,"recognized");
 
           SendTranscriptToClient(Transcript, "recognized");
         });
         
-        Future<Void> task = speechRecognition.startContinuousRecognitionAsync();
+        Future<Void> task = this.speechRecognition.startContinuousRecognitionAsync();
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
         pluginResult.setKeepCallback(Boolean.TRUE);
@@ -253,45 +252,45 @@ public class AzureSpeech extends CordovaPlugin {
     }
   }
 
-  private class MicrophoneStream extends PullAudioInputStreamCallback {
-    private final static int SAMPLE_RATE = 16000;
-    private final AudioStreamFormat format;
-    private AudioRecord recorder;
+    private class MicrophoneStream extends PullAudioInputStreamCallback {
+      private final static int SAMPLE_RATE = 16000;
+      private final AudioStreamFormat format;
+      private AudioRecord recorder;
 
-    public MicrophoneStream() {
-        this.format = AudioStreamFormat.getWaveFormatPCM(SAMPLE_RATE, (short)16, (short)1);
-        this.initMic();
-    }
+      public MicrophoneStream() {
+          this.format = AudioStreamFormat.getWaveFormatPCM(SAMPLE_RATE, (short)16, (short)1);
+          this.initMic();
+      }
 
-    public AudioStreamFormat getFormat() {
-        return this.format;
-    }
+      public AudioStreamFormat getFormat() {
+          return this.format;
+      }
 
-    @Override
-    public int read(byte[] bytes) {
-        long ret = this.recorder.read(bytes, 0, bytes.length);
-        return (int)ret;
-    }
+      @Override
+      public int read(byte[] bytes) {
+          long ret = this.recorder.read(bytes, 0, bytes.length);
+          return (int)ret;
+      }
 
-    @Override
-    public void close() {
-        this.recorder.release();
-        this.recorder = null;
-    }
+      @Override
+      public void close() {
+          this.recorder.release();
+          this.recorder = null;
+      }
 
-    private void initMic() {
-        AudioFormat af = new AudioFormat.Builder()
-                .setSampleRate(SAMPLE_RATE)
-                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
-                .build();
-        this.recorder = new AudioRecord.Builder()
-                .setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
-                .setAudioFormat(af)
-                .build();
+      private void initMic() {
+          AudioFormat af = new AudioFormat.Builder()
+                  .setSampleRate(SAMPLE_RATE)
+                  .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                  .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
+                  .build();
+          this.recorder = new AudioRecord.Builder()
+                  .setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
+                  .setAudioFormat(af)
+                  .build();
 
-        this.recorder.startRecording();
-    }
-}
+          this.recorder.startRecording();
+      }
+  }
 
 }
