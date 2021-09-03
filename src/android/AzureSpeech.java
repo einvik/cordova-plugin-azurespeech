@@ -50,100 +50,61 @@ public class AzureSpeech extends CordovaPlugin {
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) 
   {
-    Log.e(LOG_TAG,action);
-    // if (action.equals("hasPermission")) 
-    // {
-    //   try 
-    //   {
-    //     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
-    //     callbackContext.sendPluginResult(pluginResult);
-    //     return true;
-    //   }
-    //   catch (Exception e) 
-    //   {
-    //     callbackContext.error("haspermission" + e.getMessage());
-    //   }
-    // }
-
-    // if (action.equals("getPermission")) 
-    // {
-    //   try 
-    //   {
-
-    //     if (this.HasMicPermission()) 
-    //     {
-    //       PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
-    //       callbackContext.sendPluginResult(pluginResult);
-    //       return true;
-    //     } 
-    //     else 
-    //     {
-    //       this.getPermissionCallbackContext = callbackContext;
-    //       PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
-    //       pluginResult.setKeepCallback(true);
-    //       callbackContext.sendPluginResult(pluginResult);
-    //       this.GetMicPermission(RECORD_AUDIO);
-    //     }
+    Log.d(LOG_TAG,action);
+    if (action.equals("stoprecognize")) 
+    {
+      if (this.microphoneStream != null) {
+        this.speechRecognition.stopContinuousRecognitionAsync();
+        this.microphoneStream.close();
+        this.microphoneStream = null;
+        this.SendTranscriptToClient("", "Stopping speechrecognition");
+        return true;
+      }
       
-    //   }
-    //   catch (Exception e) 
-    //   {
-    //     callbackContext.error("getpermission" + e.getMessage());
-    //   }
-    // }
+    }
     if (action.equals("recognize")) 
     {
       try {
-        if (this.microphoneStream != null) {
-          this.speechRecognition.stopContinuousRecognitionAsync();
-          this.microphoneStream.close();
-          this.microphoneStream = null;
-          this.SendTranscriptToClient("Stopping speechrecognition", "Event");
-          return true;
-        }
-        
         if (this.speechConfig == null) {
           JSONObject options = args.getJSONObject(0);
           this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
         }
         this.recognizerCallbackContext = callbackContext;
-        this.SendTranscriptToClient("Starting speechrecognition", "Event");
+        this.SendTranscriptToClient("","Starting speechrecognition");
 
         AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
         // AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
         this.speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         this.speechRecognition.speechEndDetected.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"speechStartDetected event");
-          this.SendTranscriptToClient("", "speechStartDetected event");
+          Log.d(LOG_TAG,"speechStartDetected event");
+          this.SendTranscriptToClient("speechEndDetected", "");
         });    
         this.speechRecognition.speechEndDetected.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"speechEndDetected event");
-          this.SendTranscriptToClient("", "speechEndDetected event");
+          Log.d(LOG_TAG,"speechEndDetected event");
+          this.SendTranscriptToClient("speechEndDetected", "");
         });
         this.speechRecognition.sessionStopped.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"sessionStopped event");
-          this.SendTranscriptToClient("", "sessionStopped event");
+          Log.d(LOG_TAG,"sessionStopped event");
+          this.SendTranscriptToClient("speechEndDetected", "");
         });
         this.speechRecognition.sessionStarted.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"sessionStarted event");
-          this.SendTranscriptToClient("", "sessionStarted event");
+          Log.d(LOG_TAG,"sessionStarted event");
+          this.SendTranscriptToClient("sessionStarted", "");
         });
         this.speechRecognition.canceled.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"canceled event");
-          this.SendTranscriptToClient("", "canceled event");
+          Log.d(LOG_TAG,"canceled event");
+          this.SendTranscriptToClient("canceled");
         });
         this.speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"recognizing event");
+          Log.d(LOG_TAG,"recognizing event");
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-          this.SendTranscriptToClient(Transcript, "recognizing event");
-
+          this.SendTranscriptToClient("recognizing",Transcript);
         });
 
         this.speechRecognition.recognized.addEventListener((o, speechRecognitionResultEventArgs) -> {
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-          Log.e(LOG_TAG,"recognized");
-
-          SendTranscriptToClient(Transcript, "recognized");
+          Log.d(LOG_TAG,"recognized");
+          SendTranscriptToClient("recognized",Transcript);
         });
         
         Future<Void> task = this.speechRecognition.startContinuousRecognitionAsync();
@@ -155,23 +116,26 @@ public class AzureSpeech extends CordovaPlugin {
       } 
       catch(Exception e) 
       {
+        Log.e(LOG_TAG,"Error: "+ e.toString());
         callbackContext.error("regognize" + e.toString());
         return false;
       }
     }
 
-    // if (action.equals("synthesize")) 
-    // {
-    //   try {
-    //     PluginResult pluginResult = this.Synthesize(args.getJSONObject(0));
-    //     callbackContext.sendPluginResult(pluginResult);
-    //     return true;
-    //   } 
-    //   catch(Exception e) 
-    //   {
-    //     callbackContext.error("synth" + e.getMessage());
-    //   }
-    // }
+    if (action.equals("synthesize")) 
+    {
+      try {
+        Log.d(LOG_TAG,"synthesize");
+        PluginResult pluginResult = this.Synthesize(args.getJSONObject(0));
+        callbackContext.sendPluginResult(pluginResult);
+        return true;
+      } 
+      catch(Exception e) 
+      {
+        Log.e(LOG_TAG,"synth: "+ e.getMessage());
+        callbackContext.error("synth" + e.getMessage());
+      }
+    }
      
 
       return false;
@@ -187,16 +151,25 @@ public class AzureSpeech extends CordovaPlugin {
     return microphoneStream;
 }
 
-  private void SendTranscriptToClient(String Transcript,String EventName) {
+  private void SendTranscriptToClient(String EventName,String Transcript) {
     try 
     {
       JSONObject info = new JSONObject();
-      info.put(EventName,Transcript);
+      if (!EventName.equals("")) {
+
+        info.put("Event",EventName);
+      }
+
+      if (!Transcript.equals("")) {
+
+        info.put("Data",Transcript);
+      }
+      
       this.SendRecognizerUpdate(info);
     } 
     catch (JSONException e) 
     {
-      recognizerCallbackContext.error("SendTranscriptToClient, " + EventName + ":" + Transcript + e.getMessage());
+      recognizerCallbackContext.error("SendTranscriptToClient, " + EventName + ":" + Transcript + ":" + e.getMessage());
     }
 
   }

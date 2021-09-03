@@ -16,12 +16,19 @@ function AzureSpeech() {}
 // }
 
 AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, successCallback, errorCallback) {
-    var options = {};
-    options.SubscriptionKey = SubscriptionKey;
-    options.ServiceRegion = ServiceRegion;
+  var options = {};
+  options.SubscriptionKey = SubscriptionKey;
+  options.ServiceRegion = ServiceRegion;
+  
+  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
+}
+AzureSpeech.prototype.StopRecognize = function(SubscriptionKey, ServiceRegion, successCallback, errorCallback) {
+  var options = {};
+  options.SubscriptionKey = SubscriptionKey;
+  options.ServiceRegion = ServiceRegion;
 
-    cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
-  }
+  cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'stoprecognize', [options]);
+}
 AzureSpeech.install = function() {
   if (!window.plugins) {
     window.plugins = {};
