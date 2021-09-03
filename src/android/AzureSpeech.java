@@ -104,9 +104,9 @@ public class AzureSpeech extends CordovaPlugin {
           this.SendTranscriptToClient("Stopping speechrecognition", "");
           return true;
         }
+        this.recognizerCallbackContext = callbackContext;
         this.SendTranscriptToClient("Starting speechrecognition", "");
 
-        this.recognizerCallbackContext = callbackContext;
         AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
 
         // AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();

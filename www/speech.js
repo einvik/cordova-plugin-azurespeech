@@ -1,5 +1,5 @@
 function AzureSpeech() {
-  var isRegognizing = false;
+  var isRecognizing = false;
 }
 
 // AzureSpeech.prototype.HasPermission = function(successCallback, errorCallback) {
@@ -23,11 +23,11 @@ AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, succe
     options.ServiceRegion = ServiceRegion;
     if (this.isRegognizing == true) {
       options.Action = "stop";
-      this.isRegognizing = false;
+      this.isRecognizing = false;
     } else 
     {
       options.Action = "start";
-      this.isRegognizing = true;
+      this.isRecognizing = true;
     }
     cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
   }
