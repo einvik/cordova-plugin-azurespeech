@@ -97,9 +97,9 @@ public class AzureSpeech extends CordovaPlugin {
         if (this.speechConfig == null) {
           this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
         }
-        if (options.getString("Action").equals("stop")) 
+        if (options.getString("Action").equals("stop"))
         {
-          this.speechRecognition.close();
+          this.speechRecognition.stopContinuousRecognitionAsync();
           this.microphoneStream.close();
           this.SendTranscriptToClient("Stopping speechrecognition", "");
           return true;
@@ -127,10 +127,15 @@ public class AzureSpeech extends CordovaPlugin {
         });
         
         Future<Void> task = this.speechRecognition.startContinuousRecognitionAsync();
+        setOnTaskCompletedListener(task, result -> {
+          continuousListeningStarted = true;
+          this.runOnUiThread(() -> {
+            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
+            pluginResult.setKeepCallback(Boolean.TRUE);
+            callbackContext.sendPluginResult(pluginResult);
+          });
+        });
 
-        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, Boolean.TRUE);
-        pluginResult.setKeepCallback(Boolean.TRUE);
-        callbackContext.sendPluginResult(pluginResult);
         return true;
       } 
       catch(Exception e) 
@@ -290,16 +295,12 @@ public class AzureSpeech extends CordovaPlugin {
           AudioFormat af = new AudioFormat.Builder()
                   .setSampleRate(SAMPLE_RATE)
                   .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                  .setSampleRate(16000)
                   .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                   .build();
           this.recorder = new AudioRecord.Builder()
                   .setAudioSource(MediaRecorder.AudioSource.MIC)
                   .setAudioFormat(af)
-                  .setBufferSizeInBytes(2*1048)
                   .build();
-          
-      
           this.recorder.startRecording();
       }
   }

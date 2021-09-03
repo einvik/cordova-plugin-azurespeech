@@ -21,14 +21,14 @@ AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, succe
     var options = {};
     options.SubscriptionKey = SubscriptionKey;
     options.ServiceRegion = ServiceRegion;
+    this.isRecognizing = true;
+    options.Action = "start";
+
     if (this.isRegognizing == true) {
       options.Action = "stop";
       this.isRecognizing = false;
-    } else 
-    {
-      options.Action = "start";
-      this.isRecognizing = true;
     }
+
     cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
   }
 AzureSpeech.install = function() {
