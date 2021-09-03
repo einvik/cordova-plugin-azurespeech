@@ -136,7 +136,46 @@ public class AzureSpeech extends CordovaPlugin {
         callbackContext.error("synth" + e.getMessage());
       }
     }
-     
+    if (action.equals("hasPermission")) 
+    {
+      try 
+      {
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
+        callbackContext.sendPluginResult(pluginResult);
+        return true;
+      }
+      catch (Exception e) 
+      {
+        callbackContext.error("haspermission" + e.getMessage());
+      }
+    }
+
+    if (action.equals("getPermission")) 
+    {
+      try 
+      {
+
+        if (this.HasMicPermission()) 
+        {
+          PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
+          callbackContext.sendPluginResult(pluginResult);
+          return true;
+        } 
+        else 
+        {
+          this.getPermissionCallbackContext = callbackContext;
+          PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
+          pluginResult.setKeepCallback(true);
+          callbackContext.sendPluginResult(pluginResult);
+          this.GetMicPermission(RECORD_AUDIO);
+        }
+      
+      }
+      catch (Exception e) 
+      {
+        callbackContext.error("getpermission" + e.getMessage());
+      }
+    }
 
       return false;
   }
