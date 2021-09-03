@@ -290,13 +290,16 @@ public class AzureSpeech extends CordovaPlugin {
           AudioFormat af = new AudioFormat.Builder()
                   .setSampleRate(SAMPLE_RATE)
                   .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                  .setSampleRate(16000)
                   .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                   .build();
           this.recorder = new AudioRecord.Builder()
-                  .setAudioSource(MediaRecorder.AudioSource.DEFAULT)
+                  .setAudioSource(MediaRecorder.AudioSource.MIC)
                   .setAudioFormat(af)
+                  .setBufferSizeInBytes(2*1048)
                   .build();
-          this.recorder.prepare();
+          
+      
           this.recorder.startRecording();
       }
   }
