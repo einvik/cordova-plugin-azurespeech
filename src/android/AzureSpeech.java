@@ -93,8 +93,8 @@ public class AzureSpeech extends CordovaPlugin {
     if (action.equals("recognize")) 
     {
       try {
+        JSONObject options = args.getJSONObject(0);
         if (this.speechConfig == null) {
-          JSONObject options = args.getJSONObject(0);
           this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
         }
         if (options.getString("Action") == "stop") 
