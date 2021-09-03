@@ -26,6 +26,7 @@ AzureSpeech.prototype.Recognize = function(SubscriptionKey, ServiceRegion, succe
       this.isRegognizing = false;
     } else 
     {
+      options.Action = "start";
       this.isRegognizing = true;
     }
     cordova.exec(successCallback, errorCallback, 'AzureSpeech', 'recognize', [options]);
