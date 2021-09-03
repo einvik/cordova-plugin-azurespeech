@@ -26,6 +26,7 @@ import com.microsoft.cognitiveservices.speech.audio.PullAudioInputStreamCallback
 import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
 
 import android.util.Log;
+import android.media.AudioDeviceInfo;
 public class AzureSpeech extends CordovaPlugin {
 
   private static final String LOG_TAG = "AzureSpeech";
@@ -111,7 +112,26 @@ public class AzureSpeech extends CordovaPlugin {
         AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
         // AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
         this.speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
-        
+        this.speechRecognition.speechEndDetected.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          Log.e(LOG_TAG,"speechStartDetected event");
+          this.SendTranscriptToClient("", "speechStartDetected event");
+        });    
+        this.speechRecognition.speechEndDetected.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          Log.e(LOG_TAG,"speechEndDetected event");
+          this.SendTranscriptToClient("", "speechEndDetected event");
+        });
+        this.speechRecognition.sessionStopped.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          Log.e(LOG_TAG,"sessionStopped event");
+          this.SendTranscriptToClient("", "sessionStopped event");
+        });
+        this.speechRecognition.sessionStarted.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          Log.e(LOG_TAG,"sessionStarted event");
+          this.SendTranscriptToClient("", "sessionStarted event");
+        });
+        this.speechRecognition.canceled.addEventListener((o, speechRecognitionResultEventArgs) -> {
+          Log.e(LOG_TAG,"canceled event");
+          this.SendTranscriptToClient("", "canceled event");
+        });
         this.speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
           Log.e(LOG_TAG,"recognizing event");
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
@@ -264,6 +284,7 @@ public class AzureSpeech extends CordovaPlugin {
       private final static int SAMPLE_RATE = 16000;
       private final AudioStreamFormat format;
       private AudioRecord recorder;
+      
 
       public MicrophoneStream() {
           this.format = AudioStreamFormat.getWaveFormatPCM(SAMPLE_RATE, (short)16, (short)1);
@@ -293,7 +314,7 @@ public class AzureSpeech extends CordovaPlugin {
                   .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                   .build();
           this.recorder = new AudioRecord.Builder()
-                  .setAudioSource(MediaRecorder.AudioSource.MIC)
+                  .setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION)
                   .setAudioFormat(af)
                   .build();
           this.recorder.startRecording();
