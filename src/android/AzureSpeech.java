@@ -97,17 +97,25 @@ public class AzureSpeech extends CordovaPlugin {
           JSONObject options = args.getJSONObject(0);
           this.speechConfig = SpeechConfig.fromSubscription(options.getString("SubscriptionKey"),options.getString("ServiceRegion"));
         }
+        if (options.getString("Action") == "stop") 
+        {
+          this.speechRecognition.close();
+          this.microphoneStream.close();
+          this.SendTranscriptToClient("Stopping speechrecognition", "");
+          return true;
+        }
+        this.SendTranscriptToClient("Starting speechrecognition", "");
+
         this.recognizerCallbackContext = callbackContext;
-   
         AudioConfig audioInput = AudioConfig.fromStreamInput(createMicrophoneStream());
 
         // AudioConfig audioInput = AudioConfig.fromDefaultMicrophoneInput();
         this.speechRecognition = new SpeechRecognizer(speechConfig, audioInput);
         
         this.speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
-          Log.e(LOG_TAG,"recognizing");
+          Log.e(LOG_TAG,"recognizing event");
           String Transcript = speechRecognitionResultEventArgs.getResult().getText();
-          this.SendTranscriptToClient(Transcript, "recognizing");
+          this.SendTranscriptToClient(Transcript, "recognizing event");
 
         });
 
