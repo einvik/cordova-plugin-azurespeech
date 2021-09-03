@@ -93,7 +93,7 @@ public class AzureSpeech extends CordovaPlugin {
         });
         this.speechRecognition.canceled.addEventListener((o, speechRecognitionResultEventArgs) -> {
           Log.d(LOG_TAG,"canceled event");
-          this.SendTranscriptToClient("canceled");
+          this.SendTranscriptToClient("canceled","");
         });
         this.speechRecognition.recognizing.addEventListener((o, speechRecognitionResultEventArgs) -> {
           Log.d(LOG_TAG,"recognizing event");
