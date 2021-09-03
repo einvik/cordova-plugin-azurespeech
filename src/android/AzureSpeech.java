@@ -293,7 +293,7 @@ public class AzureSpeech extends CordovaPlugin {
                   .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                   .build();
           this.recorder = new AudioRecord.Builder()
-                  .setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
+                  .setAudioSource(MediaRecorder.AudioSource.MIC)
                   .setAudioFormat(af)
                   .build();
 
