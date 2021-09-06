@@ -156,7 +156,6 @@ public class AzureSpeech extends CordovaPlugin {
         {
           PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,this.HasMicPermission());
           callbackContext.sendPluginResult(pluginResult);
-          return true;
         } 
         else 
         {
@@ -166,6 +165,7 @@ public class AzureSpeech extends CordovaPlugin {
           callbackContext.sendPluginResult(pluginResult);
           this.GetMicPermission(RECORD_AUDIO);
         }
+        return true;
       
       }
       catch (Exception e) 
