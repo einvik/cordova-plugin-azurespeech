@@ -30,7 +30,6 @@ import android.media.AudioDeviceInfo;
 public class AzureSpeech extends CordovaPlugin {
 
   private static final String LOG_TAG = "AzureSpeech";
-  private static final boolean DEBUGMODE = Boolean.TRUE;
   CallbackContext callbackContext;
   CallbackContext getPermissionCallbackContext;
   CallbackContext recognizerCallbackContext;
