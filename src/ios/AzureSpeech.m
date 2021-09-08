@@ -1,5 +1,5 @@
 
-#import "Echo.h"
+#import "AzureSpeech.h"
 #import <Cordova/CDVPlugin.h>
 
 @implementation Echo
