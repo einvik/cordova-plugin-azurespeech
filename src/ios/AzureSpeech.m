@@ -16,10 +16,9 @@
 
 - (void)getPermission:(CDVInvokedUrlCommand*)command 
 {
-  CDVPluginResult* pluginResult = nil;
   [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL hasPermission) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:hasPermission];
-        [result setKeepCallbackAsBool:NO];
+        [pluginResult setKeepCallbackAsBool:NO];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }];
 }
