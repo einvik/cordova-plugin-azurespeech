@@ -2,7 +2,7 @@
 #import "AzureSpeech.h"
 #import <Cordova/CDVPlugin.h>
 
-@implementation Echo
+@implementation AzureSpeech
 
 - (void)hasPermission:(CDVInvokedUrlCommand*)command
 {
