@@ -20,7 +20,7 @@
     </js-module>
     <platform name="ios">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="AzureSpeech">
+            <feature name="HasPermission">
                 <param name="ios-package" value="AzureSpeech" onload="true"/>
             </feature>
         </config-file>
