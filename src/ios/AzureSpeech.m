@@ -1,6 +1,6 @@
 
 #import "AzureSpeech.h"
-#import <MicrosoftCognitiveServicesSpeech/SPXSpeechApi.h>
+// #import <MicrosoftCognitiveServicesSpeech/SPXSpeechApi.h>
 
 @implementation AzureSpeech
 
