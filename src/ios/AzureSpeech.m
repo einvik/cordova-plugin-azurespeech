@@ -29,8 +29,8 @@
   // NSString *speechKey = @"asdfasdf";
   // NSString *serviceRegion = @"northeurope";
   // SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:speechKey region:serviceRegion];
-  NSString * result = [[command.arguments valueForKey:@"description"] componentsJoinedByString:@""];
-
+  // NSString * result = [[command.arguments valueForKey:@"description"] componentsJoinedByString:@""];
+NSString *result = [command.arguments componentsJoinedByString:@","];
       CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
     [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
