@@ -5,5 +5,6 @@
 @interface AzureSpeech : CDVPlugin
 
 - (void)hasPermission:(CDVInvokedUrlCommand*)command;
+- (void)getPermission:(CDVInvokedUrlCommand*)command;
 
 @end
