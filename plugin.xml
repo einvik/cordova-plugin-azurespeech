@@ -19,7 +19,7 @@
         <clobbers target="window.plugins.azureSpeech" />
     </js-module>
     <platform name="ios">
-        <config-file target="res/xml/config.xml" parent="/*">
+        <config-file target="config.xml" parent="/*">
             <feature name="AzureSpeech">
                 <param name="ios-package" value="AzureSpeech" onload="true"/>
             </feature>
