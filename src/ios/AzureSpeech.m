@@ -5,11 +5,8 @@
 
 - (void)hasPermission:(CDVInvokedUrlCommand*)command
 {
-    CDVPluginResult* pluginResult = nil;
-    NSString* echo = @"Hei, du har min tillatelse.";
-    NSLog(@"%@",echo);
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:HasMicPermission()];
+    [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -19,9 +16,7 @@
     if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionGranted) {
       hasPermission = TRUE;
     }
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:hasPermission];
-    [result setKeepCallbackAsBool:NO];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    return hasPermission;
   }
 
 @end
