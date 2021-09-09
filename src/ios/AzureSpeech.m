@@ -1,6 +1,5 @@
 
 #import "AzureSpeech.h"
-#import <Cordova/CDVPlugin.h>
 
 @implementation AzureSpeech
 
