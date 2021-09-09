@@ -18,6 +18,15 @@
     <js-module src="www/speech.js" name="azureSpeech">
         <clobbers target="window.plugins.azureSpeech" />
     </js-module>
+    <platform name="ios">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AzureSpeech">
+                <param name="ios-package" value="AzureSpeech" onload="true"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/AzureSpeech.h" />
+        <source-file src="src/ios/AzureSpeech.m" />
+    </platform>
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AzureSpeech">
