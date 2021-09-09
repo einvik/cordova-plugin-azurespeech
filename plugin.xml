@@ -19,6 +19,10 @@
         <clobbers target="window.plugins.azureSpeech" />
     </js-module>
     <platform name="ios">
+        <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+            <string>This app needs microphone access</string>
+        </config-file>
+
         <config-file target="config.xml" parent="/*">
             <feature name="AzureSpeech">
                 <param name="ios-package" value="AzureSpeech" onload="true"/>
