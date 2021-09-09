@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-azurespeech" version="1.0.1">
-    <name>Azure Speech</name>
+    <name>AzureSpeech</name>
 
     <description>An Android and iOS Cordova plugin that allows communication with Azure Speech Services.</description>
     <license>MIT</license>
@@ -20,7 +20,7 @@
     </js-module>
     <platform name="ios">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="HasPermission">
+            <feature name="AzureSpeech">
                 <param name="ios-package" value="AzureSpeech" onload="true"/>
             </feature>
         </config-file>
