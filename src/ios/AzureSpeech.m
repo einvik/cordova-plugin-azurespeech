@@ -31,20 +31,7 @@
   // SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:speechKey region:serviceRegion];
   // NSString * result = [[command.arguments valueForKey:@"description"] componentsJoinedByString:@""];
 NSString *result = [command.arguments componentsJoinedByString:@","];
-NSArray *a = @[@"a", @"b"];
-NSLog(@"NSArray = %@", [a class]);
-// NSArray = __NSArrayI
-
-NSMutableArray *b = [[NSMutableArray alloc] initWithArray:a];
-NSLog(@"NSMutableArray = %@", [b class]);
-// NSMutableArray = __NSArrayM
-
-NSString *c = @"imastring";
-NSLog(@"NSString = %@", [c class]);
-// NSString = __NSCFConstantString
-
-NSNumber *d = [[NSNumber alloc] initWithInteger:5];
-NSLog(@"NSNumber = %@", [d class]);
+NSLog(@"result = %@", [result class]);
 
       CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
     [pluginResult setKeepCallbackAsBool:NO];
