@@ -28,7 +28,14 @@
                 <param name="ios-package" value="AzureSpeech" onload="true"/>
             </feature>
         </config-file>
-        <framework src="MicrosoftCognitiveServicesSpeech-iOS" type="podspec" spec="~> 1.9" />
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="MicrosoftCognitiveServicesSpeech-iOS" spec="~> 1.9" />
+            </pods>
+        </podspec>
         <header-file src="src/ios/AzureSpeech.h" />
         <source-file src="src/ios/AzureSpeech.m" />
 
