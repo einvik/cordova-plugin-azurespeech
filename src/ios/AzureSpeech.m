@@ -33,9 +33,12 @@
 NSString *result = [command.arguments componentsJoinedByString:@","];
 NSLog(@"result = %@", result);
 NSLog(@"result = %@", [result class]);
+NSDictionary* options = command.arguments[0];
+NSLog(@"Message = %@", options[@"Message"]);
+
 // id json = [NSJSONSerialization JSONObjectWithData:result options:0 error:nil];
 
-      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:options];
     [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
