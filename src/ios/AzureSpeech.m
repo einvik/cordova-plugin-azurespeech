@@ -45,24 +45,22 @@ NSString *SubscriptionKey = options[@"SubscriptionKey"];
     [speechConfig setSpeechSynthesisOutputFormat:SPXSpeechSynthesisOutputFormat_Audio16Khz32KBitRateMonoMp3];
     SPXSpeechSynthesizer *speechSynthesizer = [[SPXSpeechSynthesizer alloc] initWithSpeechConfiguration:speechConfig audioConfiguration:nil];
     SPXSpeechSynthesisResult *speechResult = [speechSynthesizer speakText:Message];
+    CDVPluginResult* pluginResult = nil;
   if (SPXResultReason_Canceled == speechResult.reason) {
-        SPXSpeechSynthesisCancellationDetails *details = [[SPXSpeechSynthesisCancellationDetails alloc] initFromCanceledSynthesisResult:speechResult];
-        NSLog(@"Speech synthesis was canceled: %@. Did you pass the correct key/region combination?", details.errorDetails);
-        // [self updateText:[NSString stringWithFormat:@"Speech synthesis was canceled: %@. Did you pass the correct key/region combination?", details.errorDetails] color:UIColor.redColor];
-      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
+      SPXSpeechSynthesisCancellationDetails *details = [[SPXSpeechSynthesisCancellationDetails alloc] initFromCanceledSynthesisResult:speechResult];
+      NSLog(@"Speech synthesis was canceled: %@. Did you pass the correct key/region combination?", details.errorDetails);
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
 
     } else if (SPXResultReason_SynthesizingAudioCompleted == speechResult.reason) {
         NSLog(@"Speech synthesis was completed");
-        // Play audio.
         self.player = [[AVAudioPlayer alloc] initWithData:[speechResult audioData] error:nil];
         [self.player prepareToPlay];
         [self.player play];
-              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
 
     } else {
         NSLog(@"There was an error.");
-              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:no;
-
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
     }
     [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
