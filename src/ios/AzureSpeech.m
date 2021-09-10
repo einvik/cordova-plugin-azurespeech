@@ -32,8 +32,9 @@
   // NSString * result = [[command.arguments valueForKey:@"description"] componentsJoinedByString:@""];
 NSString *result = [command.arguments componentsJoinedByString:@","];
 NSLog(@"result = %@", [result class]);
+id json = [NSJSONSerialization JSONObjectWithData:result options:0 error:nil];
 
-      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:json];
     [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
