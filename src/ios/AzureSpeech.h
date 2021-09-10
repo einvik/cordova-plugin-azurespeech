@@ -9,6 +9,7 @@
 - (void)synthesize:(CDVInvokedUrlCommand*)command;
 // - (void)recognize:(CDVInvokedUrlCommand*)command;
 // - (void)stoprecognize:(CDVInvokedUrlCommand*)command;
+@property (nonatomic, strong) AVAudioPlayer *player;
 
 
 @end

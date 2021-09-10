@@ -36,9 +36,34 @@ NSLog(@"result = %@", [result class]);
 NSDictionary* options = command.arguments[0];
 NSLog(@"Message = %@", options[@"Message"]);
 
-// id json = [NSJSONSerialization JSONObjectWithData:result options:0 error:nil];
+NSString *Message = options[@"Message"];
+NSString *ServiceRegion = options[@"ServiceRegion"];
+NSString *SubscriptionKey = options[@"SubscriptionKey"];
 
-      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:options];
+// id json = [NSJSONSerialization JSONObjectWithData:result options:0 error:nil];
+    SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:SubscriptionKey region:ServiceRegion];
+    [speechConfig setSpeechSynthesisOutputFormat:SPXSpeechSynthesisOutputFormat_Audio16Khz32KBitRateMonoMp3];
+    SPXSpeechSynthesizer *speechSynthesizer = [[SPXSpeechSynthesizer alloc] initWithSpeechConfiguration:speechConfig audioConfiguration:nil];
+    SPXSpeechSynthesisResult *speechResult = [speechSynthesizer speakText:Message];
+  if (SPXResultReason_Canceled == speechResult.reason) {
+        SPXSpeechSynthesisCancellationDetails *details = [[SPXSpeechSynthesisCancellationDetails alloc] initFromCanceledSynthesisResult:speechResult];
+        NSLog(@"Speech synthesis was canceled: %@. Did you pass the correct key/region combination?", details.errorDetails);
+        // [self updateText:[NSString stringWithFormat:@"Speech synthesis was canceled: %@. Did you pass the correct key/region combination?", details.errorDetails] color:UIColor.redColor];
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
+
+    } else if (SPXResultReason_SynthesizingAudioCompleted == speechResult.reason) {
+        NSLog(@"Speech synthesis was completed");
+        // Play audio.
+        self.player = [[AVAudioPlayer alloc] initWithData:[speechResult audioData] error:nil];
+        [self.player prepareToPlay];
+        [self.player play];
+              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES;
+
+    } else {
+        NSLog(@"There was an error.");
+              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:no;
+
+    }
     [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }

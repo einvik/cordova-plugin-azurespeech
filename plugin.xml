@@ -28,8 +28,10 @@
                 <param name="ios-package" value="AzureSpeech" onload="true"/>
             </feature>
         </config-file>
+        <framework src="MicrosoftCognitiveServicesSpeech-iOS" type="podspec" spec="~> 1.9" />
         <header-file src="src/ios/AzureSpeech.h" />
         <source-file src="src/ios/AzureSpeech.m" />
+
     </platform>
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
