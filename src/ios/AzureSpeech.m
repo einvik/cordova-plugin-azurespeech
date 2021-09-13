@@ -3,7 +3,8 @@
 #import <MicrosoftCognitiveServicesSpeech/SPXSpeechApi.h>
 
 @implementation AzureSpeech
-  (SPXSpeechRecognizer*) speechRecognizer;
+@synthesize speechRecognizer;
+
   - (void)hasPermission:(CDVInvokedUrlCommand*)command
   {
         BOOL hasPermission = FALSE;

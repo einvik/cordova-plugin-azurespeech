@@ -1,8 +1,10 @@
 #import <Cordova/CDVPlugin.h>
 
 #import <AVFoundation/AVFoundation.h>
+#import <MicrosoftCognitiveServicesSpeech/SPXSpeechApi.h>
 
 @interface AzureSpeech : CDVPlugin
+@property (nonatomic, retain) SPXSpeechRecognizer *speechRecognizer;
 
 - (void)hasPermission:(CDVInvokedUrlCommand*)command;
 - (void)getPermission:(CDVInvokedUrlCommand*)command;
