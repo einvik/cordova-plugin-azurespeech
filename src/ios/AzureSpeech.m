@@ -81,7 +81,6 @@
     speechRecognizer = [[SPXSpeechRecognizer alloc] init:speechConfig];
     if (!speechRecognizer) {
       NSLog(@"Could not create speech recognizer");
-        // [self updateRecognitionResultText:(@"Speech Recognition Error")];
         return;
     }
     // connect callbacks
