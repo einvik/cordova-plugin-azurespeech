@@ -87,7 +87,10 @@
     // connect callbacks
     [speechRecognizer addRecognizingEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
       NSLog(@"Received intermediate result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
+
+      let Return:NSDictionary = ["Event": "recognizing","Transcript": eventArgs.result.text];
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:Return];
+    
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
       NSLog(@"PluginResult sent.%@",command.callbackId);
