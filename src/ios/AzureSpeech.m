@@ -62,7 +62,12 @@
   }
 
   - (void)recognize {
-    SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:speechKey region:serviceRegion];
+
+    NSDictionary* options = command.arguments[0];
+    NSString *Message = options[@"Message"];
+    NSString *ServiceRegion = options[@"ServiceRegion"];
+    NSString *SubscriptionKey = options[@"SubscriptionKey"];
+    SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:SubscriptionKey region:ServiceRegion];
     if (!speechConfig) {
         NSLog(@"Could not load speech config");
         [self updateRecognitionErrorText:(@"Speech Config Error")];
