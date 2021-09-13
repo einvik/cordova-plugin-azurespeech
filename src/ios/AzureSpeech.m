@@ -61,8 +61,8 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }
 
-  - (void)recognize {
-
+  - (void)recognize:(CDVInvokedUrlCommand*)command 
+  {
     NSDictionary* options = command.arguments[0];
     NSString *Message = options[@"Message"];
     NSString *ServiceRegion = options[@"ServiceRegion"];
