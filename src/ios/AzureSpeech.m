@@ -78,7 +78,7 @@
         return;
     }
 
-    SPXSpeechRecognizer* speechRecognizer = [[SPXSpeechRecognizer alloc] init:speechConfig];
+    speechRecognizer = [[SPXSpeechRecognizer alloc] init:speechConfig];
     if (!speechRecognizer) {
       NSLog(@"Could not create speech recognizer");
         // [self updateRecognitionResultText:(@"Speech Recognition Error")];
@@ -120,7 +120,7 @@
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:TRUE];
     NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"",@"Event", @"Stopping recognition",@"Transcript", nil];
 
-    [pluginResult setKeepCallbackAsBool:YES];
+    [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
