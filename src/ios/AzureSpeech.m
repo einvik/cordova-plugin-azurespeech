@@ -61,7 +61,7 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }
 
-  - (void)recognizeFromMicrophone {
+  - (void)recognize {
     SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:speechKey region:serviceRegion];
     if (!speechConfig) {
         NSLog(@"Could not load speech config");
