@@ -3,7 +3,7 @@
 #import <MicrosoftCognitiveServicesSpeech/SPXSpeechApi.h>
 
 @implementation AzureSpeech
-
+  (SPXSpeechRecognizer*) speechRecognizer;
   - (void)hasPermission:(CDVInvokedUrlCommand*)command
   {
         BOOL hasPermission = FALSE;
@@ -102,20 +102,12 @@
     while (end == false)
         [NSThread sleepForTimeInterval:1.0f];
     [speechRecognizer stopContinuousRecognition];
-    // SPXSpeechRecognitionResult *speechResult = [speechRecognizer recognizeOnce];
-    // if (SPXResultReason_Canceled == speechResult.reason) {
-    //     SPXCancellationDetails *details = [[SPXCancellationDetails alloc] initFromCanceledRecognitionResult:speechResult];
-    //     NSLog(@"Speech recognition was canceled: %@. Did you pass the correct key/region combination?", details.errorDetails);
-    //     [self updateRecognitionErrorText:([NSString stringWithFormat:@"Canceled: %@", details.errorDetails ])];
-    // } else if (SPXResultReason_RecognizedSpeech == speechResult.reason) {
-    //     NSLog(@"Speech recognition result received: %@", speechResult.text);
-    //     [self updateRecognitionResultText:(speechResult.text)];
-    // } else {
-    //     NSLog(@"There was an error.");
-    //     [self updateRecognitionErrorText:(@"Speech Recognition Error")];
-    // }
+}
 
 
+  - (void)stoprecognize:(CDVInvokedUrlCommand*)command 
+  {
+    [speechRecognizer stopContinuousRecognition];
 }
 
 @end
