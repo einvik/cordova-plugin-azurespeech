@@ -88,7 +88,10 @@
     [speechRecognizer addRecognizingEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
       NSLog(@"Received intermediate result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
 
-      let Return:NSDictionary = ["Event": "recognizing","Transcript": eventArgs.result.text];
+      // let Return:NSDictionary = ["Event": "recognizing","Transcript": eventArgs.result.text];
+
+      NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"Event", @"recognizing", @"Transcript", eventArgs.result.text, nil];
+
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:Return];
     
       [pluginResult setKeepCallbackAsBool:YES];
