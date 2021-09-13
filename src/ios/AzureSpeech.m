@@ -86,7 +86,7 @@
     // connect callbacks
     [speechRecognizer addRecognizingEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
       NSLog(@"Received intermediate result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
-      NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"recognizing",@"Event", eventArgs.result.text,@"Transcript", nil];
+      NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"recognizing",@"Event", eventArgs.result.text,@"Data", nil];
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:Return];
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -94,7 +94,7 @@
 
     [speechRecognizer addRecognizedEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
       NSLog(@"Received final result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
-      NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"recognized",@"Event", eventArgs.result.text,@"Transcript", nil];
+      NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"recognized",@"Event", eventArgs.result.text,@"Data", nil];
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:Return];
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -117,7 +117,7 @@
     NSLog(@"Stopping recognition");
     [speechRecognizer stopContinuousRecognition];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:TRUE];
-    NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"",@"Event", @"Stopping recognition",@"Transcript", nil];
+    NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"",@"Event", @"Stopping recognition",@"Data", nil];
 
     [pluginResult setKeepCallbackAsBool:NO];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
