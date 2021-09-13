@@ -64,8 +64,11 @@
 
   - (void)recognize:(CDVInvokedUrlCommand*)command 
   {
+
+     CDVPluginResult* pluginResult = nil;
+
     NSDictionary* options = command.arguments[0];
-    NSString *Message = options[@"Message"];
+    // NSString *Message = options[@"Message"];
     NSString *ServiceRegion = options[@"ServiceRegion"];
     NSString *SubscriptionKey = options[@"SubscriptionKey"];
     SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:SubscriptionKey region:ServiceRegion];
@@ -77,41 +80,38 @@
 
     SPXSpeechRecognizer* speechRecognizer = [[SPXSpeechRecognizer alloc] init:speechConfig];
     if (!speechRecognizer) {
-        NSLog(@"Could not create speech recognizer");
+      NSLog(@"Could not create speech recognizer");
         // [self updateRecognitionResultText:(@"Speech Recognition Error")];
         return;
     }
     // connect callbacks
     [speechRecognizer addRecognizingEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
-        NSLog(@"Received intermediate result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
-        // [self updateRecognitionStatusText:eventArgs.result.text];
-
-      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
+      NSLog(@"Received intermediate result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      NSLog(@"PluginResult sent.");
     }];
 
     [speechRecognizer addRecognizedEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
-        NSLog(@"Received final result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
-        // [self updateRecognitionResultText:eventArgs.result.text];
-              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
+      NSLog(@"Received final result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      NSLog(@"PluginResult sent.");
+
     }];
 
-    // session stopped callback to recognize stream has ended
     __block bool end = false;
     [speechRecognizer addSessionStoppedEventHandler: ^ (SPXRecognizer *recognizer, SPXSessionEventArgs *eventArgs) {
         NSLog(@"Received session stopped event. SessionId: %@", eventArgs.sessionId);
-        end = true;
+       [speechRecognizer stopContinuousRecognition];
     }];
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"ok"];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"ok"];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     [speechRecognizer startContinuousRecognition];
-    while (end == false)
-        [NSThread sleepForTimeInterval:1.0f];
-    [speechRecognizer stopContinuousRecognition];
+
 }
 
 
