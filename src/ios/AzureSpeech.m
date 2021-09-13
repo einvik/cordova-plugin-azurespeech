@@ -85,11 +85,18 @@
     [speechRecognizer addRecognizingEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
         NSLog(@"Received intermediate result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
         // [self updateRecognitionStatusText:eventArgs.result.text];
+
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsText:eventArgs.result.text];
+      [pluginResult setKeepCallbackAsBool:YES];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
     [speechRecognizer addRecognizedEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
         NSLog(@"Received final result event. SessionId: %@, recognition result:%@. Status %ld. offset %llu duration %llu resultid:%@", eventArgs.sessionId, eventArgs.result.text, (long)eventArgs.result.reason, eventArgs.result.offset, eventArgs.result.duration, eventArgs.result.resultId);
         // [self updateRecognitionResultText:eventArgs.result.text];
+              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsText:eventArgs.result.text];
+      [pluginResult setKeepCallbackAsBool:YES];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
     // session stopped callback to recognize stream has ended
