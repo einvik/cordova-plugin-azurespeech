@@ -115,6 +115,7 @@
 
   - (void)stoprecognize:(CDVInvokedUrlCommand*)command 
   {
+    NSLog(@"Stopping recognition");
     [speechRecognizer stopContinuousRecognition];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:TRUE];
     NSDictionary *Return = [[NSDictionary alloc] initWithObjectsAndKeys:@"",@"Event", @"Stopping recognition",@"Transcript", nil];
