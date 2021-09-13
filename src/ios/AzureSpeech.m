@@ -70,7 +70,7 @@
     SPXSpeechConfiguration *speechConfig = [[SPXSpeechConfiguration alloc] initWithSubscription:SubscriptionKey region:ServiceRegion];
     if (!speechConfig) {
         NSLog(@"Could not load speech config");
-        [self updateRecognitionErrorText:(@"Speech Config Error")];
+        // [self updateRecognitionErrorText:(@"Speech Config Error")];
         return;
     }
 
