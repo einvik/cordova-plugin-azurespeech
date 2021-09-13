@@ -105,7 +105,7 @@
         NSLog(@"Received session stopped event. SessionId: %@", eventArgs.sessionId);
         end = true;
     }];
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:"ok"];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"ok"];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     [speechRecognizer startContinuousRecognition];
