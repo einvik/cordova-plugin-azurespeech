@@ -65,7 +65,7 @@
   - (void)recognize:(CDVInvokedUrlCommand*)command 
   {
 
-     CDVPluginResult* pluginResult = nil;
+     __block CDVPluginResult* pluginResult = nil;
 
     NSDictionary* options = command.arguments[0];
     // NSString *Message = options[@"Message"];
@@ -90,7 +90,7 @@
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      NSLog(@"PluginResult sent.");
+      NSLog(@"PluginResult sent.%@",command.callbackId);
     }];
 
     [speechRecognizer addRecognizedEventHandler: ^ (SPXSpeechRecognizer *recognizer, SPXSpeechRecognitionEventArgs *eventArgs) {
@@ -98,18 +98,23 @@
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventArgs.result.text];
       [pluginResult setKeepCallbackAsBool:YES];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      NSLog(@"PluginResult sent.");
+            NSLog(@"PluginResult sent.%@",command.callbackId);
+
 
     }];
 
     __block bool end = false;
     [speechRecognizer addSessionStoppedEventHandler: ^ (SPXRecognizer *recognizer, SPXSessionEventArgs *eventArgs) {
         NSLog(@"Received session stopped event. SessionId: %@", eventArgs.sessionId);
+            NSLog(@"PluginResult sent.%@",command.callbackId);
+
        [speechRecognizer stopContinuousRecognition];
     }];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"ok"];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            NSLog(@"PluginResult sent.%@",command.callbackId);
+
     [speechRecognizer startContinuousRecognition];
 
 }
